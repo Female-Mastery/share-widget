@@ -115,7 +115,7 @@
       <a class="social wa" id="waBtn" href="#" target="_blank" rel="noopener">
         <i class="fab fa-whatsapp" style="margin-right:8px;font-size:18px;"></i> WhatsApp
       </a>
-      <a class="social mail" id="mailBtn" href="#">
+      <a class="social mail" id="mailBtn" href="#" target="_blank">
         <i class="far fa-envelope" style="margin-right:8px;font-size:16px;"></i> E-Mail
       </a>
     </div>
@@ -126,37 +126,43 @@
 var SHARE_URL = 'https://myablefy.com/s/female-mastery/masterclass-kurs/payment';
 var SHARE_TEXT = 'Ich habe diesen kostenlosen Kurs gemacht und er hat mir die Augen geöffnet. Schau ihn dir mal an:';
 
-// Kopieren
-document.getElementById('copyBtn').addEventListener('click', async function() {
+// Kopieren – MIT Scroll-Fix
+document.getElementById('copyBtn').addEventListener('click', function() {
+  var scrollX = window.scrollX;
+  var scrollY = window.scrollY;
   var ok = false;
+
+  // Methode 1: Clipboard API
   if (navigator.clipboard && window.isSecureContext) {
-    try { await navigator.clipboard.writeText(SHARE_URL); ok = true; } catch(e) {}
+    navigator.clipboard.writeText(SHARE_URL).then(function() {
+      showSuccess();
+    }).catch(function() {
+      fallbackCopy();
+    });
+    return;
   }
-  if (!ok) {
+
+  fallbackCopy();
+
+  function fallbackCopy() {
     var ta = document.createElement('textarea');
     ta.value = SHARE_URL;
-    ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0;width:1px;height:1px';
     document.body.appendChild(ta);
-    ta.focus(); ta.select();
+    ta.focus({ preventScroll: true });
+    ta.select();
     try { ok = document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
+    // Scroll-Position wiederherstellen
+    window.scrollTo(scrollX, scrollY);
+    if (!ok) { prompt('Kopiere diesen Link:', SHARE_URL); return; }
+    showSuccess();
   }
-  if (!ok) { prompt('Kopiere diesen Link:', SHARE_URL); return; }
-  var fb = document.getElementById('feedback');
-  var bl = document.getElementById('btnLabel');
-  fb.style.opacity = '1';
-  bl.textContent = '\u2713 Kopiert!';
-  setTimeout(function() { fb.style.opacity = '0'; bl.textContent = 'Kopieren'; }, 2500);
-});
 
-// WhatsApp
-var waBtn = document.getElementById('waBtn');
-waBtn.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
-
-// E-Mail
-var mailBtn = document.getElementById('mailBtn');
-mailBtn.href = 'mailto:?subject=' + encodeURIComponent('Tipp: Kostenloser Kurs für dich') + '&body=' + encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
-</script>
-
-</body>
-</html>
+  function showSuccess() {
+    var fb = document.getElementById('feedback');
+    var bl = document.getElementById('btnLabel');
+    fb.style.opacity = '1';
+    bl.textContent = '\u2713 Kopiert!';
+    setTimeout(func
