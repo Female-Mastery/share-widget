@@ -115,7 +115,7 @@
       <a class="social wa" id="waBtn" href="#" target="_blank" rel="noopener">
         <i class="fab fa-whatsapp" style="margin-right:8px;font-size:18px;"></i> WhatsApp
       </a>
-      <a class="social mail" id="mailBtn" href="#" target="_blank">
+      <a class="social mail" id="mailBtn" href="#">
         <i class="far fa-envelope" style="margin-right:8px;font-size:16px;"></i> E-Mail
       </a>
     </div>
@@ -126,13 +126,11 @@
 var SHARE_URL = 'https://myablefy.com/s/female-mastery/masterclass-kurs/payment';
 var SHARE_TEXT = 'Ich habe diesen kostenlosen Kurs gemacht und er hat mir die Augen geöffnet. Schau ihn dir mal an:';
 
-// Kopieren – MIT Scroll-Fix
+// Kopieren
 document.getElementById('copyBtn').addEventListener('click', function() {
   var scrollX = window.scrollX;
   var scrollY = window.scrollY;
-  var ok = false;
 
-  // Methode 1: Clipboard API
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(SHARE_URL).then(function() {
       showSuccess();
@@ -145,6 +143,7 @@ document.getElementById('copyBtn').addEventListener('click', function() {
   fallbackCopy();
 
   function fallbackCopy() {
+    var ok = false;
     var ta = document.createElement('textarea');
     ta.value = SHARE_URL;
     ta.setAttribute('readonly', '');
@@ -154,7 +153,6 @@ document.getElementById('copyBtn').addEventListener('click', function() {
     ta.select();
     try { ok = document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
-    // Scroll-Position wiederherstellen
     window.scrollTo(scrollX, scrollY);
     if (!ok) { prompt('Kopiere diesen Link:', SHARE_URL); return; }
     showSuccess();
@@ -165,4 +163,19 @@ document.getElementById('copyBtn').addEventListener('click', function() {
     var bl = document.getElementById('btnLabel');
     fb.style.opacity = '1';
     bl.textContent = '\u2713 Kopiert!';
-    setTimeout(func
+    setTimeout(function() { fb.style.opacity = '0'; bl.textContent = 'Kopieren'; }, 2500);
+  }
+});
+
+// WhatsApp
+document.getElementById('waBtn').href =
+  'https://api.whatsapp.com/send?text=' + encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
+
+// E-Mail
+document.getElementById('mailBtn').href =
+  'mailto:?subject=' + encodeURIComponent('Tipp: Kostenloser Kurs für dich') +
+  '&body=' + encodeURIComponent(SHARE_TEXT + '\r\n\r\n' + SHARE_URL);
+</script>
+
+</body>
+</html>
