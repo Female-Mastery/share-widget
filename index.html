@@ -13,18 +13,20 @@
     border: 1px solid #e5e7eb;
     border-radius: 12px;
     box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    overflow: hidden;
     text-align: center;
-    padding: 30px 25px;
     color: #4b5563;
   }
+  .header { padding: 30px 20px 10px; }
+  .content { padding: 20px 30px 30px; }
   h2 {
     font-family: 'Playfair Display', serif;
     color: #1e293b;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 700;
-    margin: 0 0 8px;
+    margin: 0 0 10px;
   }
-  .sub { font-size: 14px; color: #6b7280; margin: 0 0 20px; }
+  .sub { font-size: 14px; color: #6b7280; margin: 0; }
   .label {
     display: block; font-size: 11px; font-weight: 700;
     text-transform: uppercase; color: #cca876;
@@ -34,8 +36,9 @@
     display: flex;
     background: #fff9f0;
     border: 1px solid rgba(204,168,118,0.3);
-    border-radius: 8px;
+    border-radius: 6px;
     padding: 4px;
+    margin-bottom: 5px;
     align-items: center;
   }
   .url {
@@ -44,81 +47,115 @@
     outline: none; min-width: 0;
   }
   .btn {
+    cursor: pointer; border: none; border-radius: 4px;
+    font-weight: 700; font-size: 14px;
     display: inline-flex; align-items: center; justify-content: center;
-    background: #cca876; color: #fff; font-weight: 700; font-size: 14px;
-    padding: 10px 18px; border-radius: 6px; border: none;
-    cursor: pointer; white-space: nowrap; transition: opacity 0.2s;
+    text-decoration: none; transition: opacity 0.2s;
   }
   .btn:hover { opacity: 0.85; }
+  .btn-copy {
+    background: #cca876; color: #fff;
+    padding: 10px 18px; border-radius: 6px; white-space: nowrap;
+  }
   .fb {
     color: #cca876; font-size: 12px; height: 20px;
     margin-top: 6px; opacity: 0; transition: opacity 0.3s;
   }
+  .divider {
+    display: flex; align-items: center; margin: 20px 0;
+    font-size: 11px; text-transform: uppercase; color: #ccc;
+  }
+  .divider::before, .divider::after {
+    content: ""; flex: 1; border-top: 1px solid #eee; margin: 0 10px;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+  }
+  .social {
+    padding: 12px; border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer; text-decoration: none;
+    font-weight: 700; font-size: 14px;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: opacity 0.2s;
+  }
+  .social:hover { opacity: 0.85; }
+  .wa { background: #f0fdf4; color: #15803d; border-color: #dcfce7; }
+  .mail { background: #f9fafb; color: #374151; border-color: #e5e7eb; }
 </style>
 </head>
 <body>
 
 <div class="box">
-  <i class="fas fa-gift" style="font-size:36px;color:#cca876;margin-bottom:12px;"></i>
-  <h2>Teile diesen Kurs</h2>
-  <p class="sub">Kennst du jemanden, dem dieser Inhalt auch helfen würde?</p>
-
-  <span class="label">Dein Einladungs-Link</span>
-  <div class="row">
-    <input type="text" class="url" id="shareUrl" readonly
-      value="https://thefemalemastery.com/de/masterclass/anmeldung">
-    <button class="btn" id="copyBtn">
-      <i class="far fa-copy" style="margin-right:6px;"></i>
-      <span id="btnLabel">Kopieren</span>
-    </button>
+  <div class="header">
+    <i class="fas fa-gift" style="font-size:40px;color:#cca876;margin-bottom:15px;"></i>
+    <h2>Teile diesen Kurs</h2>
+    <p class="sub">Kennst du jemanden, dem dieser Inhalt auch helfen würde?</p>
   </div>
-  <div class="fb" id="feedback">
-    <i class="fas fa-check"></i> Link kopiert!
+
+  <div class="content">
+    <span class="label">Dein Einladungs-Link</span>
+    <div class="row">
+      <input type="text" class="url" id="shareUrl" readonly
+        value="https://myablefy.com/s/female-mastery/masterclass-kurs/payment">
+      <button class="btn btn-copy" id="copyBtn">
+        <i class="far fa-copy" style="margin-right:6px;"></i>
+        <span id="btnLabel">Kopieren</span>
+      </button>
+    </div>
+    <div class="fb" id="feedback">
+      <i class="fas fa-check"></i> Link kopiert!
+    </div>
+
+    <div class="divider">Oder direkt teilen</div>
+
+    <div class="grid">
+      <a class="social wa" id="waBtn" href="#" target="_blank" rel="noopener">
+        <i class="fab fa-whatsapp" style="margin-right:8px;font-size:18px;"></i> WhatsApp
+      </a>
+      <a class="social mail" id="mailBtn" href="#">
+        <i class="far fa-envelope" style="margin-right:8px;font-size:16px;"></i> E-Mail
+      </a>
+    </div>
   </div>
 </div>
 
 <script>
-var SHARE_URL = 'https://thefemalemastery.com/de/masterclass/anmeldung';
+var SHARE_URL = 'https://myablefy.com/s/female-mastery/masterclass-kurs/payment';
+var SHARE_TEXT = 'Ich habe diesen kostenlosen Kurs gemacht und er hat mir die Augen geöffnet. Schau ihn dir mal an:';
 
+// Kopieren
 document.getElementById('copyBtn').addEventListener('click', async function() {
   var ok = false;
-
-  // Methode 1: Clipboard API
   if (navigator.clipboard && window.isSecureContext) {
-    try {
-      await navigator.clipboard.writeText(SHARE_URL);
-      ok = true;
-    } catch(e) {}
+    try { await navigator.clipboard.writeText(SHARE_URL); ok = true; } catch(e) {}
   }
-
-  // Methode 2: execCommand Fallback
   if (!ok) {
     var ta = document.createElement('textarea');
     ta.value = SHARE_URL;
     ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
     document.body.appendChild(ta);
-    ta.focus();
-    ta.select();
+    ta.focus(); ta.select();
     try { ok = document.execCommand('copy'); } catch(e) {}
     document.body.removeChild(ta);
   }
-
-  // Methode 3: Prompt Fallback
-  if (!ok) {
-    prompt('Kopiere diesen Link:', SHARE_URL);
-    return;
-  }
-
-  // Feedback
+  if (!ok) { prompt('Kopiere diesen Link:', SHARE_URL); return; }
   var fb = document.getElementById('feedback');
   var bl = document.getElementById('btnLabel');
   fb.style.opacity = '1';
   bl.textContent = '\u2713 Kopiert!';
-  setTimeout(function() {
-    fb.style.opacity = '0';
-    bl.textContent = 'Kopieren';
-  }, 2500);
+  setTimeout(function() { fb.style.opacity = '0'; bl.textContent = 'Kopieren'; }, 2500);
 });
+
+// WhatsApp
+var waBtn = document.getElementById('waBtn');
+waBtn.href = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
+
+// E-Mail
+var mailBtn = document.getElementById('mailBtn');
+mailBtn.href = 'mailto:?subject=' + encodeURIComponent('Tipp: Kostenloser Kurs für dich') + '&body=' + encodeURIComponent(SHARE_TEXT + '\n\n' + SHARE_URL);
 </script>
 
 </body>
