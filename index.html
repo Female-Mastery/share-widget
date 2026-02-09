@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: sans-serif; background: transparent; }
+  .box {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+    text-align: center;
+    padding: 30px 25px;
+    color: #4b5563;
+  }
+  h2 {
+    font-family: 'Playfair Display', serif;
+    color: #1e293b;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+  .sub { font-size: 14px; color: #6b7280; margin: 0 0 20px; }
+  .label {
+    display: block; font-size: 11px; font-weight: 700;
+    text-transform: uppercase; color: #cca876;
+    margin-bottom: 8px; text-align: left;
+  }
+  .row {
+    display: flex;
+    background: #fff9f0;
+    border: 1px solid rgba(204,168,118,0.3);
+    border-radius: 8px;
+    padding: 4px;
+    align-items: center;
+  }
+  .url {
+    flex: 1; border: none; background: transparent;
+    padding: 10px 8px; font-size: 13px; color: #555;
+    outline: none; min-width: 0;
+  }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #cca876; color: #fff; font-weight: 700; font-size: 14px;
+    padding: 10px 18px; border-radius: 6px; border: none;
+    cursor: pointer; white-space: nowrap; transition: opacity 0.2s;
+  }
+  .btn:hover { opacity: 0.85; }
+  .fb {
+    color: #cca876; font-size: 12px; height: 20px;
+    margin-top: 6px; opacity: 0; transition: opacity 0.3s;
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <i class="fas fa-gift" style="font-size:36px;color:#cca876;margin-bottom:12px;"></i>
+  <h2>Teile diesen Kurs</h2>
+  <p class="sub">Kennst du jemanden, dem dieser Inhalt auch helfen würde?</p>
+
+  <span class="label">Dein Einladungs-Link</span>
+  <div class="row">
+    <input type="text" class="url" id="shareUrl" readonly
+      value="https://thefemalemastery.com/de/masterclass/anmeldung">
+    <button class="btn" id="copyBtn">
+      <i class="far fa-copy" style="margin-right:6px;"></i>
+      <span id="btnLabel">Kopieren</span>
+    </button>
+  </div>
+  <div class="fb" id="feedback">
+    <i class="fas fa-check"></i> Link kopiert!
+  </div>
+</div>
+
+<script>
+var SHARE_URL = 'https://thefemalemastery.com/de/masterclass/anmeldung';
+
+document.getElementById('copyBtn').addEventListener('click', async function() {
+  var ok = false;
+
+  // Methode 1: Clipboard API
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(SHARE_URL);
+      ok = true;
+    } catch(e) {}
+  }
+
+  // Methode 2: execCommand Fallback
+  if (!ok) {
+    var ta = document.createElement('textarea');
+    ta.value = SHARE_URL;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta);
+  }
+
+  // Methode 3: Prompt Fallback
+  if (!ok) {
+    prompt('Kopiere diesen Link:', SHARE_URL);
+    return;
+  }
+
+  // Feedback
+  var fb = document.getElementById('feedback');
+  var bl = document.getElementById('btnLabel');
+  fb.style.opacity = '1';
+  bl.textContent = '\u2713 Kopiert!';
+  setTimeout(function() {
+    fb.style.opacity = '0';
+    bl.textContent = 'Kopieren';
+  }, 2500);
+});
+</script>
+
+</body>
+</html>
