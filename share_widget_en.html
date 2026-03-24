@@ -1,0 +1,188 @@
+<!-- 
+    IMPORTANT: 
+    Copy this entire block for the ENGLISH course.
+-->
+<div id="csw-wrapper-en" style="font-family: sans-serif; max-width: 500px; margin: 0 auto;">
+    
+    <!-- Load External Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS styling */
+        .csw-box-en {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            overflow: hidden;
+            text-align: center;
+            color: #4b5563;
+        }
+        .csw-header-en { padding: 30px 20px 10px; }
+        .csw-content-en { padding: 20px 30px 30px; }
+        
+        .csw-title-en {
+            font-family: 'Playfair Display', serif;
+            color: #1e293b;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 0 10px;
+        }
+        
+        .csw-input-row-en {
+            display: flex;
+            background: #fff9f0;
+            border: 1px solid rgba(204, 168, 118, 0.3);
+            border-radius: 6px;
+            padding: 4px;
+            margin-bottom: 5px;
+        }
+        
+        .csw-input-en {
+            flex: 1;
+            border: none;
+            background: transparent;
+            padding: 8px;
+            font-size: 13px;
+            color: #555;
+            outline: none;
+            width: 100px; /* Fix for mobile */
+        }
+        
+        .csw-btn-en {
+            cursor: pointer !important; 
+            border: none;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .csw-btn-en:hover { opacity: 0.9; }
+        
+        .csw-btn-copy-en {
+            background: #cca876; 
+            color: white; 
+            padding: 8px 16px;
+        }
+        
+        .csw-grid-en {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .csw-social-en {
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+        }
+        .csw-wa-en { background: #f0fdf4; color: #15803d; border-color: #dcfce7; }
+        .csw-mail-en { background: #f9fafb; color: #374151; border-color: #e5e7eb; }
+        
+        .csw-divider-en {
+            display: flex; align-items: center; margin: 20px 0; font-size: 11px; text-transform: uppercase; color: #ccc;
+        }
+        .csw-divider-en::before, .csw-divider-en::after {
+            content: ""; flex: 1; border-top: 1px solid #eee; margin: 0 10px;
+        }
+    </style>
+
+    <div class="csw-box-en">
+        <div class="csw-header-en">
+            <i class="fas fa-gift" style="font-size: 40px; color: #cca876; margin-bottom: 15px;"></i>
+            <h2 class="csw-title-en">Share this course</h2>
+            <p style="font-size: 14px; color: #6b7280; margin: 0;">Know someone who would benefit from this content?</p>
+        </div>
+
+        <div class="csw-content-en">
+            <label style="display:block; font-size:11px; font-weight:700; text-transform:uppercase; color:#cca876; margin-bottom:8px; text-align:left;">
+                Your invitation link
+            </label>
+            
+            <div class="csw-input-row-en">
+                <!-- IMPORTANT: Update this value="" link to your English landing page -->
+                <input type="text" id="shareInputEn" class="csw-input-en" readonly 
+                       value="https://thefemalemastery.com/masterclass" 
+                       onclick="this.select();">
+                
+                <button class="csw-btn-en csw-btn-copy-en" onclick="window.doCopyEn()">
+                    <span id="copyTextEn">Copy</span>
+                </button>
+            </div>
+            
+            <div id="copyFeedbackEn" style="color:#cca876; font-size:12px; height:18px; opacity:0; transition:opacity 0.3s;">
+                <i class="fas fa-check"></i> Link copied!
+            </div>
+
+            <div class="csw-divider-en">Or</div>
+
+            <div class="csw-grid-en">
+                <button class="csw-btn-en csw-social-en csw-wa-en" onclick="window.doWaEn()">
+                    <i class="fab fa-whatsapp" style="margin-right:8px;"></i> WhatsApp
+                </button>
+
+                <button class="csw-btn-en csw-social-en csw-mail-en" onclick="window.doMailEn()">
+                    <i class="far fa-envelope" style="margin-right:8px;"></i> Email
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* Global functions specifically for the English widget */
+        
+        // IMPORTANT: Update this URL to your English landing page!
+        window.shareUrlEn = "https://thefemalemastery.com/masterclass";
+        
+        // English share texts
+        window.shareTxtEn = "I thought you might like this course:";
+        
+        // 1. WhatsApp Function
+        window.doWaEn = function() {
+            var url = "https://wa.me/?text=" + encodeURIComponent(window.shareTxtEn + " " + window.shareUrlEn);
+            window.open(url, '_blank');
+        };
+
+        // 2. Email Function
+        window.doMailEn = function() {
+            var subject = encodeURIComponent("Gift: Online Course Recommendation");
+            var body = encodeURIComponent(window.shareTxtEn + "\n\n" + window.shareUrlEn);
+            window.location.href = "mailto:?subject=" + subject + "&body=" + body;
+        };
+
+        // 3. Copy Function
+        window.doCopyEn = function() {
+            var input = document.getElementById('shareInputEn');
+            input.select();
+            input.setSelectionRange(0, 99999); // For mobile
+            
+            try {
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(input.value);
+                } else {
+                    document.execCommand('copy');
+                }
+                
+                var feedback = document.getElementById('copyFeedbackEn');
+                var btnText = document.getElementById('copyTextEn');
+                
+                if(feedback) feedback.style.opacity = '1';
+                if(btnText) btnText.innerHTML = '<i class="fas fa-check"></i>';
+                
+                setTimeout(function() {
+                    if(feedback) feedback.style.opacity = '0';
+                    if(btnText) btnText.innerHTML = 'Copy';
+                }, 2000);
+                
+            } catch (err) {
+                alert("Please copy the link manually: " + input.value);
+            }
+        };
+    </script>
+</div>
